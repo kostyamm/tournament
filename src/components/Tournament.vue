@@ -39,6 +39,8 @@ export default {
         }
 
         const setWinner = (pair, gamer) => {
+            options.winner = null
+
             const opponent = pair.find(opponent => opponent.id !== gamer.id)
 
             opponent.winner = false
@@ -73,60 +75,88 @@ export default {
             return removeReference(pairs)
         }
 
-        const addRound = () => options.pagination.push(++options.activeRound)
-        const resetWinners = (array) => array.map(item => ({
-            ...item,
-            winner: false,
-        }))
+        const addRound = () => {
+            const nextRound = ++options.activeRound
+            if (options.pagination.every(roundNum => roundNum !== nextRound)) {
+                options.pagination.push(nextRound)
+            }
+        }
+
+        const startTournament = () => {
+            resetRounds()
+
+            addRound()
+
+            shuffleUsers()
+
+            return options.rounds[options.activeRound] = shouldPairs(options.users)
+        }
 
         const createRound = () => {
-
-            if (options.activeRound === 0) {
-                shuffleUsers()
-
-                addRound()
-
-                return options.rounds[options.activeRound] = shouldPairs(options.users)
-            }
-
-            if (normalizedRound.value?.length === 1) {
-                return options.winner = normalizedRound.value[0]
-            }
-
-            options.rounds[options.activeRound + 1] = shouldPairs(resetWinners(normalizedRound.value))
+            options.rounds[options.activeRound + 1] = shouldPairs(preparedWinners.value)
 
             addRound()
         }
 
-        const isRoundCompleted = computed(() => normalizedRound.value?.every(item => isProxy(item)))
-
         const normalizedRound = computed(() => {
-            if (!options.rounds[options.activeRound]) {
+            const round = currentRound.value
+
+            return round?.reduce((result, currentValue) => result.concat(currentValue), [])
+        })
+
+        const roundWinners = computed(() => normalizedRound.value?.filter(item => item.winner))
+
+        const preparedWinners = computed(() => {
+            if (!roundWinners.value) {
                 return
             }
 
-            const round = options.rounds[options.activeRound].reduce((result, currentValue) => {
-                const [first, second] = currentValue
-
-                const winner = first.winner && first || second.winner && second
-
-                result.push(winner)
-
-                return result
-            }, [])
-
-            return removeDuplicates(round)
+            return removeDuplicates(roundWinners.value).map(item => ({
+                ...item,
+                winner: false,
+            }))
         })
 
+        const currentRound = computed(() => options.rounds[options.activeRound])
+
+        const isCompleted = computed(() => {
+            const necessaryWinners = currentRound.value?.length
+            const winnersCount = roundWinners.value?.length
+
+            return !options.winner && necessaryWinners === winnersCount
+        })
+
+        const roundWinnersHandler = (round) => {
+            const necessaryWinners = currentRound.value?.length
+            const winnersCount = round?.length
+            const isLastRound = [winnersCount, necessaryWinners].every(i => i === 1)
+
+            if (!winnersCount) {
+                return
+            }
+
+            if (isLastRound) {
+                return options.winner = round[0]
+            }
+
+            const [first, second] = round
+
+            if (first?.id === second?.id && necessaryWinners === 2) {
+                options.winner = first
+            }
+        }
+        watch(() => roundWinners.value, roundWinnersHandler, { deep: true })
 
         onMounted(() => {
             options.users.push(initialUser('test 1', options.users))
             options.users.push(initialUser('test 4', options.users))
+            options.users.push(initialUser('test 3', options.users))
+            options.users.push(initialUser('test 2', options.users))
             options.users.push(initialUser('test 5', options.users))
         })
 
         return {
-            user, options, addUser, removeUser, setWinner, createRound, isRoundCompleted, resetOptions
+            user, options, addUser, removeUser, setWinner, createRound, isCompleted, resetRounds, resetOptions, startTournament, currentRound
         }
     },
 }
@@ -135,7 +165,14 @@ export default {
 <template>
     <input type="text" v-model="user" />
     <button @click="addUser">add</button>
-    <button @click="createRound" :disabled="options.users.length <= 1">createRound</button>
+    <button @click="startTournament" :disabled="options.users.length <= 1">startTournament</button>
+
+    <div>
+        <button @click="resetOptions()">RESET TOURNAMENT</button>
+        <button @click="resetRounds()">RESET ROUNDS</button>
+    </div>
+
+    <p>If you edit users after creating a round, all rounds will be reset</p>
     <div v-for="user of options.users" :key="user.id">
         <input type="text" v-model="user.name" />{{ user.winner }}
         <button @click="removeUser(user.id)">remove</button>
@@ -146,15 +183,14 @@ export default {
     </div>
 
     <h2>round {{ options.activeRound }}</h2>
-    <div v-for="(pair, roundIndex) of options.rounds[options.activeRound]" :key="roundIndex" class="pair">
+    <div v-for="(pair, roundIndex) of currentRound" :key="roundIndex" class="pair">
         <div v-for="gamer of pair" :key="gamer.id" @click="setWinner(pair, gamer)">
             {{ gamer.name }} {{ gamer.winner && gamer.winner.toString() }}
         </div>
     </div>
 
 
-    <button @click="createRound" :disabled="!isRoundCompleted">next</button>
-    <button @click="resetOptions()">resetOptions</button>
+    <button @click="createRound" :disabled="!isCompleted">next</button>
     <div v-for="item in options.pagination" :key="item" @click="options.activeRound = item">
         {{ item }}
     </div>
