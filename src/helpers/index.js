@@ -1,3 +1,7 @@
+import cloneDeep from 'lodash-es/cloneDeep.js'
+import clone from 'lodash-es/clone.js'
+import chunk from 'lodash-es/chunk.js'
+
 const uniqueId = (dependentArray) => {
     let id = Math.floor(Math.random() * 1000)
 
@@ -18,28 +22,21 @@ const uniqueId = (dependentArray) => {
 
 export const isEven = (n) => n % 2 === 0
 
-export const removeReference = (data) => JSON.parse(JSON.stringify(data))
+export const shouldPairs = (targetArray) => {
+    const array = cloneDeep(targetArray)
 
-export const removeDuplicates = (array) => [...new Map(array.map(item => [item.id, item])).values()]
+    const length = array.length
+    const lastIndex = length - 1
 
-export const shuffleArray = (array) => {
-    const baseRandom = (lower, upper) => lower + Math.floor(Math.random() * (upper - lower + 1))
+    if (!isEven(length)) {
+        const randomIndex = Math.floor(Math.random() * lastIndex)
 
-    let index = -1,
-        length = array.length,
-        lastIndex = length - 1
+        const randomEl = clone(array[randomIndex])
 
-    while (++index < length) {
-        let rand = baseRandom(index, lastIndex),
-            value = array[rand]
-
-        array[rand] = array[index]
-        array[index] = value
+        array.push(randomEl)
     }
 
-    array.length = length
-
-    return array
+    return chunk(array, 2)
 }
 
 export const initialUser = (name, array) => ({

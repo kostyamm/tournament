@@ -1,6 +1,11 @@
 <script>
-import { computed, isProxy, onMounted, reactive, ref, watch } from 'vue'
-import { initialUser, shuffleArray, removeReference, removeDuplicates, isEven } from '../helpers/index.js'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { initialUser, isEven } from '../helpers/index.js'
+import shuffle from 'lodash-es/shuffle.js'
+
+const removeReference = (data) => JSON.parse(JSON.stringify(data))
+
+const removeDuplicates = (array) => [...new Map(array.map(item => [item.id, item])).values()]
 
 export default {
     name: "Tournament",
@@ -26,7 +31,7 @@ export default {
             options.winner = null
         }
 
-        const shuffleUsers = () => options.users = shuffleArray(options.users)
+        const shuffleUsers = () => options.users = shuffle(options.users)
 
         const addUser = () => options.users.push(initialUser(user.value, options.users))
 
@@ -75,7 +80,7 @@ export default {
             return removeReference(pairs)
         }
 
-        const addRound = () => {
+        const nextRound = () => {
             const nextRound = ++options.activeRound
             if (options.pagination.every(roundNum => roundNum !== nextRound)) {
                 options.pagination.push(nextRound)
@@ -85,7 +90,7 @@ export default {
         const startTournament = () => {
             resetRounds()
 
-            addRound()
+            nextRound()
 
             shuffleUsers()
 
@@ -95,7 +100,7 @@ export default {
         const createRound = () => {
             options.rounds[options.activeRound + 1] = shouldPairs(preparedWinners.value)
 
-            addRound()
+            nextRound()
         }
 
         const normalizedRound = computed(() => {
@@ -172,7 +177,7 @@ export default {
         <button @click="resetRounds()">RESET ROUNDS</button>
     </div>
 
-    <p>If you edit users after creating a round, all rounds will be reset</p>
+    <p>If you edit users list after creating a round, all rounds will be reset</p>
     <div v-for="user of options.users" :key="user.id">
         <input type="text" v-model="user.name" />{{ user.winner }}
         <button @click="removeUser(user.id)">remove</button>
