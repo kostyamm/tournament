@@ -84,8 +84,11 @@ const mutations = {
     },
     nextRound: (state, usersPairs) => {
         const nextRound = ++state.activeRound
+        const roundIndex = nextRound-1
 
         state.rounds[nextRound] = usersPairs
+
+        state.pagination = state.pagination.splice(0, roundIndex)
 
         if (state.pagination.every(roundNum => roundNum !== nextRound)) {
             state.pagination.push(nextRound)

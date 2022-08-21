@@ -1,0 +1,30 @@
+@import "../variables";
+
+a {
+  font-weight: 500;
+  color: $color--yellow--dark;
+  font-size: 18px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+@media #{$screen-desktop} {
+  a:hover {
+    color: $color--yellow;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  a {
+    color: $color--dark;
+    text-decoration: underline;
+
+    &:hover {
+      color: $color--dark--light
+    }
+  }
+}

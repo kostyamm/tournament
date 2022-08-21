@@ -168,6 +168,9 @@ export default {
 </script>
 
 <template>
+    <div class="tournament">
+
+    </div>
     <input type="text" v-model="user" />
     <button @click="addUser">add</button>
     <button @click="startTournament" :disabled="options.users.length <= 1">startTournament</button>
@@ -208,7 +211,12 @@ export default {
     <!--    </div>-->
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../assets/styles/variables.scss";
+.tournament {
+    max-width: $max-width--half;
+    margin: 0 auto;
+}
 
 .pair {
     display: flex;

@@ -1,0 +1,48 @@
+@import "variables";
+@import "common";
+@import "tags/index";
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: $color--white;
+  background-color: $color--dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: $min-width;
+}
+
+#app {
+  max-width: $max-width;
+  margin: 0 auto 48px;
+
+  overflow-x: hidden;
+}
+
+@media #{$screen-desktop-after} {
+  #app {
+    padding: 0 12px;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: $color--blue--dark;
+    background-color: $color--white;
+  }
+  svg {
+    color: $color--blue--dark;
+  }
+}

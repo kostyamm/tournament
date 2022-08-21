@@ -1,0 +1,20 @@
+$color--white: rgba(255, 255, 255, 0.87);
+$color--white--light: rgba(255, 255, 255, 0.70);
+$color--dark: #242424;
+$color--dark--light: #333333;
+$color--blue--dark: #213547;
+$color--yellow: #ffd500;
+$color--yellow--dark: #fdc500;
+$color--grey: #737373;
+$color--grey--light: #ebebeb;
+
+$border-radius: 8px;
+
+$min-width: 320px;
+$max-width: 1280px;
+$max-width--half: calc($max-width / 2);
+
+$screen-mobile: 'screen and (max-width: 600px)';
+$screen-tablet: 'screen and (max-width: 960px)';
+$screen-desktop: 'screen and (min-width: 960px)';
+$screen-desktop-after: 'screen and (max-width: 1280px)';

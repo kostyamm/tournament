@@ -1,0 +1,34 @@
+@import '../variables';
+
+input {
+  width: calc(100% - 30px);
+  padding: 8px 12px 6px;
+  font-size: 16px;
+  line-height: 22px;
+
+  background-color: $color--dark--light;
+  border: 2px solid transparent;
+  border-radius: $border-radius;
+  outline: none;
+
+  transition: border-color 0.25s;
+
+  ::placeholder, :-ms-input-placeholder, ::-ms-input-placeholder {
+    color: $color--grey--light;
+    opacity: 1;
+  }
+
+  &:focus, &:focus-visible {
+    border-color: $color--yellow--dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  input {
+    background-color: $color--grey--light;
+
+    &:focus, &:focus-visible {
+      border-color: $color--dark;
+    }
+  }
+}

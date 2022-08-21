@@ -1,0 +1,54 @@
+@import "../variables";
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  max-height: 40px;
+
+  background-color: $color--yellow;
+  color: $color--dark;
+  border-radius: $border-radius;
+  cursor: pointer;
+
+  svg {
+    font-size: 12px;
+  }
+}
+
+button {
+  padding: 8px 12px 6px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 22px;
+
+  border-radius: $border-radius;
+  border: 2px solid transparent;
+  background-color: $color--yellow;
+  cursor: pointer;
+
+  color: $color--dark;
+
+  transition: border-color 0.25s;
+
+  &[disabled] {
+    background-color: $color--grey;
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  button, .icon-button {
+    background-color: $color--blue--dark;
+    color: $color--white;
+
+    svg {
+      color: $color--white;
+    }
+  }
+}
