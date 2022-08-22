@@ -1,7 +1,8 @@
-import { shouldPairs } from '../../helpers/index.js'
+import { isEven } from '../../helpers/index.js'
 import shuffle from 'lodash-es/shuffle.js'
 import flatten from 'lodash-es/flatten.js'
 import uniqBy from 'lodash-es/uniqBy.js'
+import chunk from 'lodash-es/chunk.js'
 
 const initialState = () => ({
     rounds: {},
@@ -18,14 +19,20 @@ const getters = {
     winner: (state) => state.winner,
 
     currentRound: (state) => state.rounds[state.activeRound],
-    roundWinners: (state, getters) => flatten(getters.currentRound).filter(({ winner }) => winner),
-    preparedWinners: (state, getters) => uniqBy(getters.roundWinners, 'id').map(item => ({ ...item, winner: false })),
+    roundWinners: (state, { currentRound }) => {
+        const normalizedRound = flatten(currentRound)
+        const length = normalizedRound.length
+        const lastIndex = length - 1
 
-    necessaryWinners: (state, getters) => getters.currentRound?.length,
-    winnersCount: (state, getters) => getters.roundWinners?.length,
-    isLastRound: (state, getters) => [getters.winnersCount, getters.necessaryWinners].every(i => i === 1),
+        return normalizedRound.filter(({ winner }, index) => winner || (!isEven(length) && index === lastIndex))
+    },
+    preparedWinners: (state, { roundWinners }) => uniqBy(roundWinners, 'id').map(item => ({ ...item, winner: false })),
 
-    isCompleted: (state, getters) => !getters.winner && getters.necessaryWinners === getters.winnersCount,
+    necessaryWinners: (state, { currentRound }) => currentRound?.length,
+    winnersCount: (state, { roundWinners }) => roundWinners?.length,
+    isLastRound: (state, { winnersCount, necessaryWinners }) => [winnersCount, necessaryWinners].every(i => i === 1),
+
+    isCompleted: (state, { winner, necessaryWinners, winnersCount }) => !winner && necessaryWinners === winnersCount,
 }
 
 const actions = {
@@ -40,10 +47,10 @@ const actions = {
 
         const mixedUsers = shuffle(users)
 
-        commit('nextRound', shouldPairs(mixedUsers))
+        commit('nextRound', mixedUsers)
     },
     createRound: ({ commit, getters }) => {
-        commit('nextRound', shouldPairs(getters.preparedWinners))
+        commit('nextRound', getters.preparedWinners)
     },
     recordWinner: ({ commit, getters }, data) => {
         commit('setUserWinner', data)
@@ -52,10 +59,8 @@ const actions = {
             return
         }
 
-        const { gamer } = data
-
         if (getters.isLastRound) {
-            return commit('setWinner', gamer)
+            return commit('setWinner', data.gamer)
         }
 
         if (getters.necessaryWinners === 2) {
@@ -72,9 +77,7 @@ const mutations = {
     resetState: (state) => Object.assign(state, initialState()),
     setActiveRound: (state, round) => state.activeRound = round,
     setWinner: (state, winner) => state.winner = winner,
-    setUserWinner: (state, data) => {
-        const { pair, gamer } = data
-
+    setUserWinner: (state, { pair, gamer }) => {
         state.winner = null
 
         const opponent = pair.find(opponent => opponent.id !== gamer.id)
@@ -82,11 +85,11 @@ const mutations = {
         opponent.winner = false
         gamer.winner = true
     },
-    nextRound: (state, usersPairs) => {
+    nextRound: (state, users) => {
         const nextRound = ++state.activeRound
         const roundIndex = nextRound-1
 
-        state.rounds[nextRound] = usersPairs
+        state.rounds[nextRound] = chunk(users, 2)
 
         state.pagination = state.pagination.splice(0, roundIndex)
 

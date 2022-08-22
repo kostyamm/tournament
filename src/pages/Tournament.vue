@@ -25,7 +25,15 @@ export default {
         onMounted(() => startTournament())
 
         return {
-            activeRound, winner, pagination, recordWinner, createRound, isCompleted, startTournament, currentRound, changeActiveRound
+            activeRound,
+            winner,
+            pagination,
+            recordWinner,
+            createRound,
+            isCompleted,
+            startTournament,
+            currentRound,
+            changeActiveRound,
         }
     },
 }
@@ -41,19 +49,28 @@ export default {
 
         <h2 v-if="winner">{{ winner.name }} is champion</h2>
 
-        <div v-for="(pair, roundIndex) of currentRound" :key="roundIndex" class="tournament__pair">
-            <div
-                @click="recordWinner(pair, pair[0])"
-                :class="[{ 'tournament__pair__item--winner': pair[0].winner }, 'tournament__pair__item']"
-            >
-                {{pair[0].name}}
-            </div>
-            <span>VS</span>
-            <div
-                @click="recordWinner(pair, pair[1])"
-                :class="[{ 'tournament__pair__item--winner': pair[1].winner }, 'tournament__pair__item']"
-            >
-                {{pair[1].name}}
+        <div
+            v-for="([ firstPlayer, secondPlayer ], roundIndex) in currentRound"
+            :key="roundIndex"
+            class="tournament__pair"
+        >
+            <template v-if="!secondPlayer">
+                <b>{{ firstPlayer.name }}</b> - <small>Will be moved to the next round</small>
+            </template>
+            <div v-else class="tournament__pair__active">
+                <div
+
+                    @click="recordWinner([ firstPlayer, secondPlayer ], firstPlayer)"
+                    :class="[{ 'tournament__pair__active__item--winner': firstPlayer.winner }, 'tournament__pair__active__item']"
+                >
+                    {{ firstPlayer.name }}
+                </div>
+                <div
+                    @click="recordWinner([ firstPlayer, secondPlayer ], secondPlayer)"
+                    :class="[{ 'tournament__pair__active__item--winner': secondPlayer.winner }, 'tournament__pair__active__item']"
+                >
+                    {{ secondPlayer.name }}
+                </div>
             </div>
         </div>
 
@@ -76,6 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
+
 .tournament {
     max-width: $max-width--half;
     margin: 0 auto;
@@ -92,38 +110,47 @@ export default {
     }
 
     &__pair {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         margin-bottom: 24px;
         font-size: 18px;
 
-        & span {
-            font-weight: 900;
-        }
+        &__active {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-        &__item {
-            flex: 1;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-
-            cursor: pointer;
-            border: 2px solid $color--grey;
-            border-radius: $border-radius;
-            padding: 8px 12px;
-
-            &:first-child {
-                margin-right: 16px;
+            &:after {
+                position: absolute;
+                content: 'VS';
+                left: calc(50% - 24px);
+                top: 0;
+                font-weight: 900;
+                transform: translate(50%, 50%);
             }
 
-            &:last-child {
-                margin-left: 16px;
-            }
+            &__item {
+                flex: 1;
 
-            &--winner {
-                border-color: $color--yellow--dark;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                cursor: pointer;
+                border: 2px solid $color--grey;
+                border-radius: $border-radius;
+                padding: 8px 12px;
+
+                &:first-child {
+                    margin-right: 24px;
+                }
+
+                &:last-child {
+                    margin-left: 24px;
+                }
+
+                &--winner {
+                    border-color: $color--yellow--dark;
+                }
             }
         }
     }
