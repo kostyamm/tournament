@@ -3,6 +3,7 @@ import shuffle from 'lodash-es/shuffle.js'
 import flatten from 'lodash-es/flatten.js'
 import uniqBy from 'lodash-es/uniqBy.js'
 import chunk from 'lodash-es/chunk.js'
+import cloneDeep from 'lodash-es/cloneDeep.js'
 
 const initialState = () => ({
     rounds: {},
@@ -37,7 +38,7 @@ const getters = {
 
 const actions = {
     startTournament: ({ rootState, commit }) => {
-        const users = rootState.users.users
+        const users = cloneDeep(rootState.users.users)
 
         if (users.length <= 1) {
             return console.error('A minimum of 2 players is required to start the tournament')
@@ -89,7 +90,9 @@ const mutations = {
         const nextRound = ++state.activeRound
         const roundIndex = nextRound-1
 
-        state.rounds[nextRound] = chunk(users, 2)
+        const mixedUsers = shuffle(users)
+
+        state.rounds[nextRound] = chunk(mixedUsers, 2)
 
         state.pagination = state.pagination.splice(0, roundIndex)
 

@@ -10,6 +10,6 @@ const uniqueId = (dependentArray) => {
     return checkId()
 }
 
-export const initialUser = (name, array) => ({ id: uniqueId(array), winner: false, name })
+export const initialUser = (name, array) => ({ id: uniqueId(array), name })
 
 export const isEven = (n) => n % 2 === 0
