@@ -62,10 +62,10 @@ export const useStateSaver = (stateName) => {
         stateStorage.set(stateName, store.state[stateName])
     }
 
-    onMounted(() => window.addEventListener('unload', save))
+    onMounted(() => window.addEventListener('pagehide', save))
     onUnmounted(() => {
         save()
-        window.removeEventListener('unload', save)
+        window.removeEventListener('pagehide', save)
     })
 
     return { stateRestorer }
