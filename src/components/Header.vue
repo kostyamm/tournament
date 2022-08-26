@@ -52,24 +52,13 @@ export default {
 
 .header {
     position: relative;
-    height: 60px;
-    max-height: 60px;
-    margin-bottom: 24px;
+    height: 64px;
+    max-height: 64px;
+    margin-bottom: 12px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    &:after {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        content: ' ';
-        height: 2px;
-        background-color: $color--dark--light;
-        border-radius: $border-radius;
-    }
 
     &__logo {
         font-size: 28px;
