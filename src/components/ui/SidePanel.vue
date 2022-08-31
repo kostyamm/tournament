@@ -21,14 +21,15 @@ export default {
 <template>
     <teleport to="body">
         <transition name="fade">
-            <div v-if="showPanel" class="side" @click.self="onClose">
-                <div class="side__panel">
+            <div v-if="showPanel" class="side-panel" @click.self="onClose">
+                <div class="side-panel__header">
+                    <span class="icon-button" @click="onClose">
+                        <mdi-light-arrow-left-circle />
+                    </span>
+                </div>
+                <div class="side-panel__content">
                     <slot />
                 </div>
-
-                <span class="icon-button side__close" @click="onClose">
-                    <mdi-light-arrow-left-circle />
-                </span>
             </div>
         </transition>
     </teleport>
@@ -39,46 +40,62 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: all 0.08s ease;
+    transition: all 0.1s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+    transform: translateX(-200px);
 }
 
-$side-width: 320px;
+$side-panel-width: 320px;
 
-.side {
-    overflow: hidden;
+.side-panel {
     position: fixed;
     top: 0;
+    bottom: 0;
     left: 0;
+    right: 0;
     z-index: 110;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(100, 100, 100, 0.5);
+    max-width: $side-panel-width;
+    background-color: $color--dark--light;
 
-    &__panel {
-        width: calc(#{$side-width} - 32px);
-        position: fixed;
+    &:after {
+        position: absolute;
+        content: ' ';
+        left: $side-panel-width;
         top: 0;
-        left: 0;
-        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+
+        cursor: pointer;
+
         background-color: $color--dark;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 70px 16px 16px;
+        opacity: 0.6;
     }
 
-    &__close {
-        position: absolute;
-        top: 15px;
-        left: calc(#{$side-width - 62px});
+    &__header {
+        height: 64px;
+        max-height: 64px;
+        padding: 0 12px;
+        margin-bottom: 12px;
+
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+
+    &__content {
+        padding: 0 12px;
+
+        overflow-y: auto;
+        height: calc(100vh - 76px);
     }
 }
+
 @media (prefers-color-scheme: light) {
-    .side__panel {
+    .side-panel {
         background-color: white;
     }
 }
