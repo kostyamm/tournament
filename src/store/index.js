@@ -15,7 +15,6 @@ export default createStore({
         notices: state => state.notices,
     },
     mutations: {
-        restoreState: (state, { stateName, stateData }) => Object.assign(state[stateName], stateData),
         addNotice(state, notice) {
             if (state.notices.length >= MAX_LENGTH_NOTICE) {
                 state.notices.shift()

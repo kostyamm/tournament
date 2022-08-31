@@ -1,12 +1,14 @@
 <script>
-import { useStateSaver } from './hooks/useStateSaver.js'
 import Header from './components/Header.vue'
+import { useStore } from 'vuex'
+import { onMounted } from 'vue'
 
 export default {
     components: { Header },
     setup() {
-        const { stateRestorer } = useStateSaver()
-        stateRestorer(['users'])
+        const store = useStore()
+
+        onMounted(() => store.dispatch('users/restoreState'))
 
         return {}
     },

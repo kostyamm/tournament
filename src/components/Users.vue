@@ -1,7 +1,6 @@
 <script>
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useStateSaver } from '../hooks/useStateSaver.js'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -10,7 +9,6 @@ export default {
 
     setup() {
         const router = useRouter()
-        useStateSaver('users')
 
         const store = useStore()
         const user = ref()
@@ -24,6 +22,13 @@ export default {
             userEl.value?.focus()
         }
         const removeUser = (id) => store.commit('users/removeUser', id)
+        const saveState = () => store.dispatch('users/saveState')
+
+        onMounted(() => window.addEventListener('pagehide', saveState))
+        onUnmounted(() => {
+            saveState()
+            window.removeEventListener('pagehide', saveState)
+        })
 
         return {
             user,
