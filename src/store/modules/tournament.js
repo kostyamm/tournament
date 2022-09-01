@@ -27,10 +27,13 @@ const getters = {
 
         return normalizedRound.filter(({ winner }, index) => winner || (!isEven(length) && index === lastIndex))
     },
-    preparedWinners: (state, { roundWinners }) => uniqBy(roundWinners, 'id').map(item => ({ ...item, winner: false })),
+    preparedWinners: (state, { roundWinners }) => {
+        return uniqBy(roundWinners, 'id')
+            .map(item => ({ ...item, winner: false }))
+    },
 
     necessaryWinners: (state, { currentRound }) => currentRound?.length,
-    winnersCount: (state, { roundWinners }) => roundWinners?.length,
+    winnersCount: (state, { roundWinners }) => roundWinners.length,
     isLastRound: (state, { winnersCount, necessaryWinners }) => [winnersCount, necessaryWinners].every(i => i === 1),
 
     isCompleted: (state, { winner, necessaryWinners, winnersCount }) => !winner && necessaryWinners === winnersCount,
@@ -45,10 +48,7 @@ const actions = {
         }
 
         commit('resetState')
-
-        const mixedUsers = shuffle(users)
-
-        commit('nextRound', mixedUsers)
+        commit('nextRound', shuffle(users))
     },
     createRound: ({ commit, getters }) => {
         commit('nextRound', getters.preparedWinners)
@@ -56,20 +56,13 @@ const actions = {
     recordWinner: ({ commit, getters }, data) => {
         commit('setUserWinner', data)
 
-        if (!getters.winnersCount) {
-            return
-        }
+        if (!getters.winnersCount) return
+        if (getters.isLastRound) return commit('setWinner', data.gamer)
 
-        if (getters.isLastRound) {
-            return commit('setWinner', data.gamer)
-        }
+        const [first, second] = getters.roundWinners
 
-        if (getters.necessaryWinners === 2) {
-            const [first, second] = getters.roundWinners
-
-            if (first?.id === second?.id) {
-                commit('setWinner', first)
-            }
+        if (getters.necessaryWinners === 2 && first?.id === second?.id) {
+            commit('setWinner', first)
         }
     },
 }
@@ -88,13 +81,10 @@ const mutations = {
     },
     nextRound: (state, users) => {
         const nextRound = ++state.activeRound
-        const roundIndex = nextRound-1
 
-        const mixedUsers = shuffle(users)
+        state.rounds[nextRound] = chunk(shuffle(users), 2)
 
-        state.rounds[nextRound] = chunk(mixedUsers, 2)
-
-        state.pagination = state.pagination.splice(0, roundIndex)
+        state.pagination = state.pagination.splice(0, nextRound - 1)
 
         if (state.pagination.every(roundNum => roundNum !== nextRound)) {
             state.pagination.push(nextRound)

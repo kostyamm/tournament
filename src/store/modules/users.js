@@ -1,6 +1,10 @@
 import { initialUser } from '../../helpers/index.js'
 import isEqual from 'lodash-es/isEqual.js'
 
+const getStorageItem = () => JSON.parse(localStorage.getItem('users'))
+const setStorageItem = (state) => localStorage.setItem('users', JSON.stringify(state))
+const removeStorageItem = () => localStorage.removeItem('users')
+
 const initialState = () => ({
     users: []
 })
@@ -13,20 +17,16 @@ const getters = {
 
 const actions = {
     saveState: ({ state }) => {
-        const savedState = localStorage.getItem('users')
-        const isRestored = isEqual(state, savedState)
+        const isRestored = isEqual(state, getStorageItem())
         const isInitialState = isEqual(state, initialState())
 
-        if (isInitialState) return localStorage.removeItem('users')
-
+        if (isInitialState) return removeStorageItem()
         if (isRestored) return
 
-        localStorage.setItem('users', JSON.stringify(state))
+        setStorageItem(state)
     },
     restoreState: ({ commit }) => {
-        const savedState = JSON.parse(localStorage.getItem('users'))
-
-        commit('resetState', savedState)
+        commit('resetState', getStorageItem())
     }
 }
 
