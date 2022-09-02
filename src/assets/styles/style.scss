@@ -9,8 +9,6 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: $color--white;
-  background-color: $color--dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -22,27 +20,34 @@
 body {
   margin: 0;
   min-width: $min-width;
+
+  background-color: $color--dark;
+  color: $color--white;
 }
 
 #app {
-  max-width: $max-width;
-  margin: 0 auto 48px;
-
   overflow-x: hidden;
+  position: relative;
 }
 
-@media #{$screen-desktop-after} {
-  #app {
-    padding: 0 12px;
-  }
+.container {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.container--half {
+  @extend .container;
+
+  max-width: $max-width--half;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    color: $color--blue--dark;
+  body {
+    color: $color--dark;
     background-color: $color--white;
   }
   svg {
-    color: $color--blue--dark;
+    color: $color--dark;
   }
 }

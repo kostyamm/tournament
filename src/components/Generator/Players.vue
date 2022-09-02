@@ -2,10 +2,11 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import Accordion from '../ui/Accordion.vue'
 
 export default {
-    name: "Users",
-    components: {},
+    name: "Players",
+    components: { Accordion },
 
     setup() {
         const router = useRouter()
@@ -43,7 +44,7 @@ export default {
 </script>
 
 <template>
-    <div class="players">
+    <div class="players container--half">
         <h1>Players</h1>
 
         <div class="players__create">
@@ -53,25 +54,23 @@ export default {
             </div>
         </div>
 
-        <div v-for="user of users" :key="user.id" class="players__item">
-            <div class="players__item__name">{{ user.name }}</div>
-
-            <span class="icon-button" @click="removeUser(user.id)">
-                <mdi-light-minus />
-            </span>
-        </div>
+        <Accordion v-if="users.length" :title="`${users.length} Player(s) added`" active>
+            <div v-for="user of users" :key="user.id" class="players__item">
+                <div class="players__item__name">{{ user.name }}</div>
+                    <span class="icon-button" @click="removeUser(user.id)">
+                    <mdi-light-minus />
+                </span>
+            </div>
+        </Accordion>
 
         <button @click="router.push('/tournament')">Go to tournament</button>
     </div>
 </template>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 .players {
-    max-width: $max-width--half;
-    margin: 0 auto;
-
     &__create {
         display: flex;
         align-items: center;
@@ -86,7 +85,10 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 12px;
+
+        &:not(:last-child) {
+            margin-bottom: 12px;
+        }
 
         &__name {
             font-size: 18px;

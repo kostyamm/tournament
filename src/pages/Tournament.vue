@@ -40,11 +40,11 @@ export default {
 </script>
 
 <template>
-    <div class="tournament">
+    <div class="tournament container--half">
         <div class="tournament__title">
             <h1>Round {{ activeRound }}</h1>
 
-            <button @click="startTournament()">Restart pairs</button>
+            <button @click="startTournament()">Mix pairs</button>
         </div>
 
         <h2 v-if="winner">{{ winner.name }} is champion</h2>
@@ -95,9 +95,6 @@ export default {
 @import "../assets/styles/variables";
 
 .tournament {
-    max-width: $max-width--half;
-    margin: 0 auto;
-
     &__title {
         display: flex;
         align-items: center;
@@ -149,7 +146,7 @@ export default {
                 }
 
                 &--winner {
-                    border-color: $color--yellow--dark;
+                    border-color: $color--yellow;
                 }
             }
         }
@@ -181,7 +178,7 @@ export default {
 
                 &--active {
                     background-color: $color--yellow;
-                    color: $color--blue--dark;
+                    color: $color--dark;
                 }
             }
         }
@@ -189,7 +186,7 @@ export default {
 
     @media (prefers-color-scheme: light) {
         &__pair__item {
-            border-color: $color--grey--light;
+            border-color: $color--grey;
 
             &--winner {
                 border-color: $color--dark;
@@ -197,7 +194,7 @@ export default {
         }
 
         &__footer__pagination__item--active {
-            background-color: $color--blue--dark;
+            background-color: $color--dark;
             color: $color--white;
         }
     }

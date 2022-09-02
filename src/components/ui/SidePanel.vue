@@ -59,12 +59,13 @@ $side-panel-width: 320px;
     right: 0;
     z-index: 110;
     max-width: $side-panel-width;
-    background-color: $color--dark--light;
+    background-color: $color--dark;
+    border-right: 1px solid $color--yellow;
 
     &:after {
         position: absolute;
         content: ' ';
-        left: $side-panel-width;
+        left: calc($side-panel-width + 1px);
         top: 0;
         width: 100vw;
         height: 100vh;
@@ -72,7 +73,7 @@ $side-panel-width: 320px;
         cursor: pointer;
 
         background-color: $color--dark;
-        opacity: 0.6;
+        opacity: 0.8;
     }
 
     &__header {

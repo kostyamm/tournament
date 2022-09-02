@@ -1,9 +1,6 @@
 <script>
-import Users from '../components/Users.vue'
-
 export default {
     name: "Home",
-    components: { Users },
     setup () {
         return {  }
     }
@@ -11,5 +8,8 @@ export default {
 </script>
 
 <template>
-    <Users />
+    <h1>home</h1>
 </template>
+
+<style lang="scss" scoped>
+</style>
