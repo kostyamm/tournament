@@ -2,13 +2,13 @@
 
 input {
   width: calc(100% - 30px);
-  padding: 8px 12px 6px;
+  padding: 8px 12px 8px;
   font-size: 16px;
   line-height: 22px;
 
-  background-color: $color--white;
-  border: 2px solid $color--white;
-  color: $color--dark;
+  background-color: $color--dark--light;
+  border: 1px solid $color--dark--light;
+  color: $color--white;
 
   outline: none;
   border-radius: $border-radius;
@@ -19,8 +19,8 @@ input {
     color: $color--grey;
   }
 
-  &:focus, &:focus-visible {
-    border-color: $color--grey;
+  &:hover, &:focus, &:focus-visible {
+    border-color: $color--yellow;
   }
 }
 

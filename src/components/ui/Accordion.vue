@@ -52,10 +52,7 @@ export default {
     opacity: 0;
 }
 
-.fade-down-enter-active {
-    transition: all 0.15s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
+.fade-down-enter-active,
 .fade-down-leave-active {
     transition: all 0.15s cubic-bezier(1, 0.5, 0.8, 1);
 }
