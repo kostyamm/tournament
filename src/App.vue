@@ -18,7 +18,7 @@ export default {
 
 <template>
     <Header />
-    <div class="content">
+    <div class="content container">
         <router-view />
     </div>
     <Footer />
@@ -26,7 +26,8 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-    padding: 88px 0;
+    padding-top: 88px;
+    padding-bottom: 88px;
     min-height: calc(100vh - 240px);
 }
 </style>

@@ -3,10 +3,20 @@ ul {
   padding: 0;
 
   li {
+    position: relative;
+    padding: 12px;
+    display: flex;
+    align-items: center;
     list-style-type: none;
 
-    &:not(:last-child) {
-      margin-bottom: 8px;
+
+    &:not(:last-child)::after {
+      position: absolute;
+      content: ' ';
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-bottom: 1px solid $color--grey--border;
     }
   }
 }

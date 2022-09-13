@@ -33,7 +33,7 @@ export default {
         z-index: -1;
         background: rgb(0, 0, 0);
         background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, $color--dark 100%);
-        border-top: 1px solid rgba(115, 115, 115, 0.2);
+        border-top: 1px solid $color--grey--border;
     }
 
     &__content {

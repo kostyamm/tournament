@@ -8,7 +8,11 @@ export const useValidation = (schema, form) => {
         try {
             await schema.validate(form, { abortEarly: false })
         } catch (e) {
-            e.inner.forEach(error => errors[error.path] = error.message)
+            e.inner.forEach(error => {
+                if (errors[error.path]) return
+
+                errors[error.path] = error.message
+            })
         }
 
         return {

@@ -8,7 +8,7 @@ export default {
             type: String,
             required: true,
         },
-        active: Boolean
+        active: Boolean,
     },
     setup({ active }) {
         const show = ref(active)
@@ -20,12 +20,18 @@ export default {
 
 <template>
     <div class="accordion">
-        <div class="accordion__title" @click="show = !show">
-            <transition name="fade" mode="out-in">
-                <mdi-light-arrow-up-circle v-if="show" />
-                <mdi-light-arrow-down-circle v-else />
-            </transition>
+        <div
+            @click="show = !show"
+            :class="[
+                'accordion__title',
+                { 'accordion__title--show' : show }
+            ]"
+        >
             <div>{{ title }}</div>
+            <transition name="fade" mode="out-in">
+                <mdi-light-chevron-up v-if="show" />
+                <mdi-light-chevron-down v-else />
+            </transition>
         </div>
         <transition name="fade-down" mode="out-in">
             <div v-if="show" class="accordion__content">
@@ -38,17 +44,14 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/styles/variables";
 
-.fade-enter-active {
-    transition: all 0.15s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
+.fade-enter-active,
 .fade-leave-active {
-    transition: all 0.15s cubic-bezier(1, 0.5, 0.8, 1);
+    transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
 .fade-enter-from,
 .fade-leave-to {
-    transform: translateY(2px);
+    transform: translateY(-6px);
     opacity: 0;
 }
 
@@ -62,30 +65,40 @@ export default {
     transform: translateY(-20px);
     opacity: 0;
 }
-
 .accordion {
     margin-bottom: 24px;
 
     &__title {
         display: flex;
         align-items: center;
-
-        color: $color--yellow;
+        justify-content: space-between;
+        background-color: $color--dark--light;
+        color: $color--white;
         font-size: 18px;
         cursor: pointer;
+        height: 48px;
+        padding: 0 12px;
+        border: 1px solid transparent;
+        border-radius: $border-radius;
+
+        transition: border-color 0.3s ease, border-radius 0.3s ease, color 0.3s ease;
 
         svg {
             font-size: 12px;
-            margin-right: 4px;
+        }
+
+        &--show {
+            border-color: $color--grey--border;
+            color: $color--yellow;
+            border-radius: $border-radius $border-radius 0 0;
         }
     }
 
     &__content {
-        border-left: 1px solid $color--yellow;
-        background-color: $color--dark--light;
-        border-radius: 0 $border-radius $border-radius 0;
+        border: 1px solid $color--grey--border;
+        border-top: none;
+        border-radius: 0 0 $border-radius $border-radius;
         padding: 12px;
-        margin-top: 12px;
     }
 }
 </style>

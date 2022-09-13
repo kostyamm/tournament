@@ -19,6 +19,23 @@
     font-size: 12px;
   }
 }
+.icon-button--circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: $color--yellow;
+  cursor: pointer;
+
+  svg {
+    font-size: 16px;
+  }
+}
+.icon-button--circle--red {
+  @extend .icon-button--circle;
+
+  color: $color--red;
+}
 
 button {
   padding: 8px 12px 6px;

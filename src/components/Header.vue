@@ -2,6 +2,7 @@
 import SidePanel from './ui/SidePanel.vue'
 import { useBreakpoints } from '../hooks/useBreakpoints.js'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
     name: "Header",
@@ -9,13 +10,20 @@ export default {
     setup() {
         const { isDesktop } = useBreakpoints()
         const showPanel = ref(false)
+        const router = useRouter()
+
+        const toRoute = (to) => {
+            showPanel.value = false
+            router.push(to)
+        }
 
         const options = [
-            { label: 'Users', to: '/' },
-            { label: 'Tournament', to: '/tournament' },
+            { label: 'Login', to: '/login', action: () => toRoute('/login') },
+            { label: 'Generator', to: '/generator', action: () => toRoute('/generator') },
+            { label: 'Tournament', to: '/tournament', action:  () => toRoute('/tournament') },
         ]
 
-        return { showPanel, options, isDesktop }
+        return { showPanel, options, isDesktop, router }
     },
 }
 </script>
@@ -31,18 +39,16 @@ export default {
                 <mdi-light-menu />
             </span>
             <div v-else class="header__content__links">
-                <router-link to="/generator">Generator</router-link>
-                <router-link to="/tournament">Tournament</router-link>
+                <router-link v-for="(option, index) in options" :key="index" :to="option.to">
+                    {{ option.label }}
+                </router-link>
             </div>
         </div>
 
         <SidePanel v-model="showPanel">
             <ul>
-                <li>
-                    <router-link to="/generator" @click="showPanel = false">Generator</router-link>
-                </li>
-                <li>
-                    <router-link to="/tournament" @click="showPanel = false">Tournament</router-link>
+                <li v-for="(option, index) in options" :key="index" @click="option.action">
+                    {{option.label}}
                 </li>
             </ul>
         </SidePanel>
@@ -51,6 +57,24 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
+
+ul {
+    margin: 0 -12px;
+
+    li {
+        font-size: 18px;
+        font-weight: 500;
+        color: $color--yellow;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $color--yellow;
+            color: $color--dark;
+        }
+    }
+}
 
 .header {
     position: fixed;
@@ -70,7 +94,7 @@ export default {
         z-index: -1;
         background: rgb(0, 0, 0);
         background: linear-gradient(180deg, $color--dark 0%, rgba(0, 0, 0, 0) 100%);
-        border-bottom: 1px solid rgba(115, 115, 115, 0.2);
+        border-bottom: 1px solid $color--grey--border;
     }
 
     &__content {
