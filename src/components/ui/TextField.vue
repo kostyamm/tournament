@@ -1,5 +1,5 @@
 <script>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = {
     modelValue: [String, Number],
@@ -23,7 +23,7 @@ export default {
     name: "TextField",
     inheritAttrs: false,
     props,
-    setup(props, { emit }) {
+    setup(props, { emit, slots }) {
         const input = ref(null)
 
         const onInput = (e) => emit('update:modelValue', e.target.value)
@@ -37,11 +37,14 @@ export default {
             }
         }
 
+        const hasActionSlot = computed(() => !!slots.action)
+
         return {
             input,
             onInput,
             validate,
             disablePressing,
+            hasActionSlot
         }
     },
 }
@@ -56,19 +59,23 @@ export default {
         }"
     >
         <label :class="{required}">{{ label }}</label>
-        <input
-            ref="input"
-            v-bind="$attrs"
-            :id="name"
-            :name="name"
-            :type="type"
-            :value="modelValue"
-            @input="onInput"
-            @blur="validate"
-            @keyup="validate"
-            @keydown="disablePressing"
-            autocomplete="off"
-        />
+        <div :class="[{'input-group__input--with-slot': hasActionSlot},'input-group__input']">
+            <input
+                ref="input"
+                v-bind="$attrs"
+                :id="name"
+                :name="name"
+                :type="type"
+                :value="modelValue"
+                @input="onInput"
+                @blur="validate"
+                @keyup="validate"
+                @keydown="disablePressing"
+                autocomplete="off"
+            />
+
+            <slot name="action" />
+        </div>
         <transition name="fade-down" mode="out-in">
             <p class="input-group__help-message" v-if="error">
                 {{ error }}
@@ -135,33 +142,48 @@ export default {
         }
     }
 
-    input {
-        width: calc(100% - 30px);
-        padding: 8px 12px 8px;
-        font-size: 16px;
-        line-height: 22px;
+    &__input {
+        display: flex;
+        align-items: center;
 
-        background-color: $color--dark--light;
-        border: 1px solid $color--dark--light;
-        color: $color--white;
+        input {
+            width: 100%;
+            padding: 8px 12px 8px;
+            font-size: 16px;
+            line-height: 22px;
 
-        outline: none;
-        border-radius: $border-radius;
+            background-color: $color--dark--light;
+            border: 1px solid $color--dark--light;
+            color: $color--white;
 
-        transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            outline: none;
+            border-radius: $border-radius;
 
-        ::placeholder, :-ms-input-placeholder, ::-ms-input-placeholder {
-            color: $color--grey;
+            transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+            ::placeholder, :-ms-input-placeholder, ::-ms-input-placeholder {
+                color: $color--grey;
+            }
+
+            &:hover, &:focus, &:focus-visible {
+                border-color: $color--yellow;
+            }
+
+            &:disabled {
+                opacity: 0.4;
+                border-color: $color--grey;
+                background-color: transparent;
+            }
         }
 
-        &:hover, &:focus, &:focus-visible {
-            border-color: $color--yellow;
-        }
-
-        &:disabled {
-            opacity: 0.4;
-            border: 1px solid $color--grey;
-            background-color: transparent;
+        &--with-slot {
+            input {
+                border-radius: $border-radius 0 0 $border-radius;
+                border-right: none;
+            }
+            :deep(span) {
+                border-radius: 0 $border-radius $border-radius 0;
+            }
         }
     }
 
@@ -184,6 +206,16 @@ export default {
 
     &--success {
         @include validate-style($color--green)
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    input {
+        background-color: $color--grey;
+
+        &:focus, &:focus-visible {
+            border-color: $color--dark;
+        }
     }
 }
 </style>

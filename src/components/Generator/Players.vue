@@ -75,10 +75,13 @@ export default {
                 @keypress.enter="addUser"
                 @validate="validateField"
                 :error="errors.userName"
-            />
-            <div class="icon-button" @click="addUser">
-                <mdi-light-plus />
-            </div>
+            >
+                <template #action>
+                    <span class="icon-button" @click="addUser">
+                        <mdi-light-plus />
+                    </span>
+                </template>
+            </TextField>
         </div>
 
         <Accordion v-if="users.length" :title="`${users.length} user(s) added`" active>
