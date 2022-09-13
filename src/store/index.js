@@ -1,4 +1,5 @@
 import { createStore, createLogger } from 'vuex'
+import user from './modules/user.js'
 import users from './modules/users.js'
 import tournament from './modules/tournament.js'
 
@@ -31,6 +32,7 @@ export default createStore({
         },
     },
     modules: {
+        user,
         users,
         tournament
     },

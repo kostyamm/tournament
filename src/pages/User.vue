@@ -1,9 +1,13 @@
 <script>
 export default {
-    name: "Home"
+    name: "User",
 }
 </script>
 
 <template>
-    <h1>home</h1>
+    <h1>User</h1>
 </template>
+
+<style scoped>
+
+</style>

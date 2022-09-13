@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from './store/index.js'
+import Cookies from 'js-cookie'
 
 // Auto generates routes from vue files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -30,8 +32,18 @@ const router = createRouter({
     ],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
     document.title = to.meta?.title || 'Your tournament'
+
+    const token = Cookies.get('token')
+
+    if (token && !store.getters['user/isAuth']) {
+        // await store.dispatch('user/checkAuth')
+    }
+
+    if (to.path !== '/login' && !store.getters['user/isAuth']) {
+        return { path: '/login', query: { to: to.fullPath } }
+    }
 })
 
 export default router

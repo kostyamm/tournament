@@ -19,6 +19,7 @@ export default {
 
         const options = [
             { label: 'Login', to: '/login', action: () => toRoute('/login') },
+            { label: 'User', to: '/user', action: () => toRoute('/user') },
             { label: 'Generator', to: '/generator', action: () => toRoute('/generator') },
             { label: 'Tournament', to: '/tournament', action:  () => toRoute('/tournament') },
         ]

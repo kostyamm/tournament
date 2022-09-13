@@ -3,26 +3,37 @@ import TextField from '../components/ui/TextField.vue'
 import { object, string } from 'yup'
 import { reactive } from 'vue'
 import { useValidation } from '../hooks/useValidation.js'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 
 const schema = object({
     name: string().required().min(6),
-    password: string().required().min(10).transform(val => val || undefined)
+    password: string().required().min(6).transform(val => val || undefined)
 })
 
 export default {
     name: "Login",
     components: { TextField },
     setup () {
+        const store = useStore()
+        const route = useRoute()
+        const router = useRouter()
+
         const form = reactive({
-            name: '',
-            password: ''
+            name: 'kostyamm',
+            password: 'qwerty'
         })
 
         const { validateField, validateForm, errors } = useValidation(schema, form)
 
         const signIn = async () => {
             const { isValid } = await validateForm()
-            console.log(isValid)
+
+            if (isValid) {
+                await store.dispatch('user/signIn')
+
+                router.push(route.query.to || '/')
+            }
         }
 
         return { form, schema, signIn, errors, validateField}
