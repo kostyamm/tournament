@@ -66,20 +66,19 @@ export default {
     opacity: 0;
 }
 .accordion {
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 
     &__title {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: $color--dark--light;
         color: $color--white;
         font-size: 18px;
         cursor: pointer;
         height: 48px;
         padding: 0 12px;
         border: 1px solid transparent;
-        border-radius: $border-radius;
+        border-bottom-color: $color--grey--border;
 
         transition: border-color 0.3s ease, border-radius 0.3s ease, color 0.3s ease;
 

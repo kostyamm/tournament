@@ -1,18 +1,9 @@
 <script>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
-import { useStore } from 'vuex'
-import { onMounted } from 'vue'
 
 export default {
     components: { Header, Footer },
-    setup() {
-        const store = useStore()
-
-        onMounted(() => store.dispatch('users/restoreState'))
-
-        return {}
-    },
 }
 </script>
 

@@ -15,9 +15,7 @@ export const useValidation = (schema, form) => {
             })
         }
 
-        return {
-            isValid: isEmpty(errors)
-        }
+        return { isValid: isEmpty(errors) }
     }
 
     const validateField = async (field) => {
@@ -32,6 +30,6 @@ export const useValidation = (schema, form) => {
     return {
         validateField,
         validateForm,
-        errors
+        errors,
     }
 }

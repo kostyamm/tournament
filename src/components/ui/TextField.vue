@@ -13,7 +13,7 @@ const props = {
     },
     type: {
         type: String,
-        default: 'text'
+        default: 'text',
     },
     description: String,
     error: String,
@@ -44,7 +44,7 @@ export default {
             onInput,
             validate,
             disablePressing,
-            hasActionSlot
+            hasActionSlot,
         }
     },
 }
@@ -145,6 +145,7 @@ export default {
     &__input {
         display: flex;
         align-items: center;
+        flex-wrap: nowrap;
 
         input {
             width: 100%;
@@ -181,6 +182,7 @@ export default {
                 border-radius: $border-radius 0 0 $border-radius;
                 border-right: none;
             }
+
             :deep(span) {
                 border-radius: 0 $border-radius $border-radius 0;
             }

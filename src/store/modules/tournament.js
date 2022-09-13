@@ -1,4 +1,4 @@
-import { isEven } from '../../helpers/index.js'
+import { initialUser, isEven } from '../../helpers/index.js'
 import shuffle from 'lodash-es/shuffle.js'
 import flatten from 'lodash-es/flatten.js'
 import uniqBy from 'lodash-es/uniqBy.js'
@@ -6,6 +6,11 @@ import chunk from 'lodash-es/chunk.js'
 import cloneDeep from 'lodash-es/cloneDeep.js'
 
 const initialState = () => ({
+    users: [
+        {id: 162, name: '1'},
+        {id: 474, name: '2'},
+        {id: 941, name: '3'}
+    ],
     rounds: {},
     activeRound: 0,
     pagination: [],
@@ -15,6 +20,7 @@ const initialState = () => ({
 const state = initialState()
 
 const getters = {
+    users: state => state.users,
     pagination: (state) => state.pagination,
     activeRound: (state) => state.activeRound,
     winner: (state) => state.winner,
@@ -40,8 +46,8 @@ const getters = {
 }
 
 const actions = {
-    startTournament: ({ rootState, commit }) => {
-        const users = cloneDeep(rootState.users.users)
+    startTournament: ({ state, commit }) => {
+        const users = cloneDeep(state.users)
 
         if (users.length <= 1) {
             return console.error('A minimum of 2 players is required to start the tournament')
@@ -90,6 +96,9 @@ const mutations = {
             state.pagination.push(nextRound)
         }
     },
+
+    addUser: (state, userName) => state.users.push(initialUser(userName, state.users)),
+    removeUser: (state, userId) => state.users = state.users.filter(user => user.id !== userId),
 }
 
 export default {

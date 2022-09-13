@@ -39,6 +39,7 @@ body {
 .container--half {
   @extend .container;
 
+  padding: 0;
   max-width: $max-width--half;
 }
 

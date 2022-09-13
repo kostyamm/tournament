@@ -1,6 +1,5 @@
 import { createStore, createLogger } from 'vuex'
 import user from './modules/user.js'
-import users from './modules/users.js'
 import tournament from './modules/tournament.js'
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -33,7 +32,6 @@ export default createStore({
     },
     modules: {
         user,
-        users,
         tournament
     },
     strict: debug,

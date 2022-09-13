@@ -22,6 +22,7 @@ export default {
             { label: 'User', to: '/user', action: () => toRoute('/user') },
             { label: 'Generator', to: '/generator', action: () => toRoute('/generator') },
             { label: 'Tournament', to: '/tournament', action:  () => toRoute('/tournament') },
+            { label: 'About', to: '/about', action:  () => toRoute('/about') },
         ]
 
         return { showPanel, options, isDesktop, router }

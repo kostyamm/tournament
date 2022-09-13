@@ -1,27 +1,24 @@
 <script>
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import Accordion from '../ui/Accordion.vue'
 import TextField from '../ui/TextField.vue'
 import { useValidation } from '../../hooks/useValidation.js'
 import { object, string } from 'yup'
 
 const schema = object({
-    userName: string().required(),
+    userName: string().min(5).required(),
 })
 
 export default {
     name: "Players",
-    components: { TextField, Accordion },
+    components: { TextField },
 
     setup() {
-        const router = useRouter()
         const store = useStore()
         const userRef = ref()
 
         const form = reactive({
-            userName: ''
+            userName: '',
         })
 
         const { validateField, validateForm, errors } = useValidation(schema, form)
@@ -31,22 +28,15 @@ export default {
 
             if (!isValid) return
 
-            store.commit('users/addUser', form.userName)
+            store.commit('tournament/addUser', form.userName)
 
             form.userName = ''
             userRef.value?.input.focus()
         }
 
-        const removeUser = (id) => store.commit('users/removeUser', id)
-        const saveState = () => store.dispatch('users/saveState')
+        const removeUser = (id) => store.commit('tournament/removeUser', id)
 
-        const users = computed(() => store.getters['users/users'])
-
-        onMounted(() => window.addEventListener('pagehide', saveState))
-        onUnmounted(() => {
-            saveState()
-            window.removeEventListener('pagehide', saveState)
-        })
+        const users = computed(() => store.getters['tournament/users'])
 
         return {
             form,
@@ -54,16 +44,15 @@ export default {
             users,
             addUser,
             removeUser,
-            router,
             errors,
-            validateField
+            validateField,
         }
     },
 }
 </script>
 
 <template>
-    <div class="users container--half">
+    <div class="users">
         <div class="users__create">
             <TextField
                 ref="userRef"
@@ -84,19 +73,15 @@ export default {
             </TextField>
         </div>
 
-        <Accordion v-if="users.length" :title="`${users.length} user(s) added`" active>
-            <TransitionGroup name="list" tag="ul" mode="out-in">
-                <li v-for="user of users" :key="user.id" class="users__item">
-                    <div class="users__item__name">{{ user.name }}</div>
+        <TransitionGroup name="list" tag="ul" mode="out-in">
+            <li v-for="user of users" :key="user.id" class="users__item">
+                <div class="users__item__name">{{ user.name }}</div>
 
-                    <span class="icon-button--circle--red" @click="removeUser(user.id)">
-                        <mdi-light-minus-circle />
-                    </span>
-                </li>
-            </TransitionGroup>
-        </Accordion>
-
-        <button @click="router.push('/tournament')">Go to tournament</button>
+                <span class="icon-button--circle--red" @click="removeUser(user.id)">
+                    <mdi-light-minus-circle />
+                </span>
+            </li>
+        </TransitionGroup>
     </div>
 </template>
 
@@ -116,10 +101,6 @@ export default {
 }
 
 .users {
-    ul {
-        margin: -12px;
-    }
-
     &__create {
         display: flex;
         align-items: center;
