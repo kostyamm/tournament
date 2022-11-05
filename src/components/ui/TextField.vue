@@ -124,7 +124,7 @@ export default {
         position: relative;
         display: block;
         text-transform: uppercase;
-        color: $color--grey;
+        color: $color--white;
         font-size: 12px;
         line-height: 18px;
 
@@ -153,8 +153,8 @@ export default {
             font-size: 16px;
             line-height: 22px;
 
-            background-color: $color--dark--light;
-            border: 1px solid $color--dark--light;
+            background-color: $color--grey--darken;
+            border: 1px solid transparent;
             color: $color--white;
 
             outline: none;

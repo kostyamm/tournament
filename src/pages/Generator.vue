@@ -18,7 +18,7 @@ export default {
 <template>
     <div class="container--half">
         <Players />
-        <button @click="router.push('/tournament')">Go to tournament</button>
+        <button @click="router.push('/tournament')" class="outline">Go to tournament</button>
     </div>
 </template>
 

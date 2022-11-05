@@ -11,14 +11,24 @@ const options = {
     custom: {
         families: [
             {
-                name: 'mk2',
-                local: 'mk2',
-                src: './src/assets/fonts/mk2.ttf',
+                name: 'Zilla Slab',
+                local: 'Zilla Slab',
+                src: './src/assets/styles/font/ZillaSlab-Regular.ttf',
             },
             {
-                name: 'mk4',
-                local: 'mk4',
-                src: './src/assets/fonts/mk4.ttf',
+                name: 'Zilla Slab',
+                local: 'Zilla Slab',
+                src: './src/assets/styles/font/ZillaSlab-Italic.ttf',
+            },
+            {
+                name: 'Montserrat',
+                local: 'Montserrat',
+                src: './src/assets/styles/font/Montserrat-Regular.ttf',
+            },
+            {
+                name: 'Montserrat',
+                local: 'Montserrat',
+                src: './src/assets/styles/font/Montserrat-Bold.ttf',
             },
         ],
         display: 'swap',

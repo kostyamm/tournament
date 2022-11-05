@@ -1,14 +1,16 @@
 @import "../variables";
 
+$icon-size: 40px;
+
 .icon-button {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  min-width: 40px;
-  max-width: 40px;
-  min-height: 40px;
-  max-height: 40px;
+  min-width: $icon-size;
+  max-width: $icon-size;
+  min-height: $icon-size;
+  max-height: $icon-size;
 
   background-color: $color--yellow;
   color: $color--dark;
@@ -19,6 +21,7 @@
     font-size: 12px;
   }
 }
+
 .icon-button--circle {
   display: flex;
   align-items: center;
@@ -31,6 +34,7 @@
     font-size: 16px;
   }
 }
+
 .icon-button--circle--red {
   @extend .icon-button--circle;
 
@@ -56,6 +60,17 @@ button {
   &[disabled] {
     background-color: $color--grey;
     opacity: 0.4;
+  }
+
+  &.outline {
+    background-color: transparent;
+    border-color: $color--yellow;
+    color: $color--yellow;
+  }
+
+  &.text {
+    background-color: transparent;
+    color: $color--yellow;
   }
 }
 
