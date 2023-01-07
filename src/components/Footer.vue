@@ -1,13 +1,28 @@
 <script>
 export default {
     name: "Footer",
+    setup() {
+        const options = [
+            { label: 'Login', to: '/login', action: () => toRoute('/login') },
+            { label: 'User', to: '/user', action: () => toRoute('/user') },
+            { label: 'Generator', to: '/generator', action: () => toRoute('/generator') },
+            { label: 'Tournament', to: '/tournament', action:  () => toRoute('/tournament') },
+            { label: 'About', to: '/about', action:  () => toRoute('/about') },
+        ]
+
+        return { options }
+    }
 }
 </script>
 
 <template>
     <div class="footer">
         <div class="footer__content container">
-            Footer
+            <ul>
+                <li v-for="(option, index) in options" :key="index" @click="option.action">
+                    {{option.label}}
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -17,22 +32,15 @@ export default {
 
 .footer {
     position: relative;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    height: 64px;
-    max-height: 64px;
+    padding: 24px 0;
 
     &::after {
         position: absolute;
         content: ' ';
         top: 0;
-        bottom: 0;
         left: 0;
         right: 0;
         z-index: -1;
-        background: rgb(0, 0, 0);
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, $color--dark 100%);
         border-top: 1px solid $color--grey--border;
     }
 

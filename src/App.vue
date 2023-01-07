@@ -18,7 +18,6 @@ export default {
 <style lang="scss" scoped>
 .content {
     padding-top: 88px;
-    padding-bottom: 88px;
-    min-height: calc(100vh - 240px);
+    min-height: calc(100vh - 88px);
 }
 </style>
